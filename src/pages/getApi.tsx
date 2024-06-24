@@ -7,7 +7,7 @@ export const getApi = async () => {
                 "X-API-KEY": process.env.NEXT_PUBLIC_RESAS_API_KEY,
             }
         });
-        console.log(response.data.result);
+        // console.log(response.data.result);
         return(response.data.result);
     }
     catch(error){
