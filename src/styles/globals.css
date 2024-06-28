@@ -1,7 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200..900&display=swap');
+
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  text-decoration: none;
+  list-style: none;
+  font-family: "Noto Serif JP", serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
 }
 
 html,

@@ -1,6 +1,11 @@
 import axios from "axios";
 
-export const getApi = async () => {
+interface PrefectureTypes {
+    prefCode: number;
+    prefName: string;
+  }
+
+export const getApi = async (): Promise<PrefectureTypes[]> => {
     try{
         const response = await axios.get("https://opendata.resas-portal.go.jp/api/v1/prefectures/", {
             headers: {
@@ -10,8 +15,8 @@ export const getApi = async () => {
         // console.log(response.data.result);
         return(response.data.result);
     }
-    catch(error){
-        console.error("Error fetching data:", error);
+    catch {
+        console.error("Error fetching data:");
         return [];
     }
 };
