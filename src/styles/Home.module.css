@@ -1,4 +1,4 @@
-.Container{
+.Container {
   width: 100vw;
   height: 100vh;
   background-color: white;
@@ -6,7 +6,7 @@
   flex-direction: row;
 }
 
-.selectBox input[type="checkbox"] {
+.selectBox input[type='checkbox'] {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -19,13 +19,13 @@
   margin-right: 20px;
 }
 
-.selectBox input[type="checkbox"]:checked::after {
+.selectBox input[type='checkbox']:checked::after {
   content: '✔️';
   display: block;
   color: white;
 }
 
-.selectBox{
+.selectBox {
   flex: 0.5;
   width: 100%;
   height: 100%;
@@ -33,29 +33,29 @@
   overflow: scroll;
 }
 
-.selectBox h1{
+.selectBox h1 {
   font-size: 1.2rem;
   color: white;
   text-align: center;
   margin: 3%;
 }
 
-.selectBox ul{
+.selectBox ul {
   color: white;
 }
 
-.selectBox ul li{
+.selectBox ul li {
   font-size: 1.1rem;
   margin: 10px;
 }
 
-.chartsBox{
+.chartsBox {
   flex: 2;
   width: 100%;
   height: 100%;
   padding: 0 4%;
 }
 
-.PoputationData{
+.PoputationData {
   background-color: pink;
 }
