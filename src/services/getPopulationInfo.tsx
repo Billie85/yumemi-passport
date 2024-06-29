@@ -1,9 +1,9 @@
 import axios from "axios";
 import { promises } from "dns";
 import { headers } from "next/headers";
-import { PopulationCompositionResponse } from "./PopulationComposition";
+import { ApiResponse } from "../components/PopulationComposition";
 
-export const getPopulationInfo = async (prefCode: number):Promise<PopulationCompositionResponse | null> => {
+export const getPopulationInfo = async (prefCode: number):Promise<ApiResponse | null> => {
     
     try {
         const response = await axios.get("https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear", {

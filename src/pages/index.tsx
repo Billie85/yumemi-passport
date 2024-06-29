@@ -1,12 +1,31 @@
-import Head from "next/head";
-import Image from "next/image";
-import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
-const inter = Inter({ subsets: ["latin"] });
 import { use, useEffect, useState } from "react";
-import { getApi } from "./getApi";
-import { getPopulationInfo } from "./getPopulationInfo";
-import {PopulationLabelData } from "./PopulationComposition";
+import { getApi } from "../services/getApi";
+import { getPopulationInfo } from "../services/getPopulationInfo";
+import { LabelData } from "../components/PopulationComposition";
+import Highcharts, { Axis } from "highcharts";
+import HighchartsReact from "highcharts-react-official";
+
+interface Charts {
+  title: {
+    text: string;
+  };
+  xAxis: {
+    title: {
+      text: string;
+    };
+    type: string;
+  };
+  yAxis: {
+    title: {
+      text: string;
+    };
+  };
+  series: {
+    name: string;
+    data: [number, number][];
+  }[];
+}
 
 interface PrefectureTypes {
   prefCode: number;
@@ -15,9 +34,11 @@ interface PrefectureTypes {
 
 export default function Home() {  
   const [prefectures, setPrefectures] = useState<PrefectureTypes[]>([]);
-  const [populationData, setPoputationData] = useState<PopulationLabelData[]>([]);
+  const [populationData, setPoputationData] = useState<LabelData[]>([]);
   const [checkPrefecture, setcheckPrefecture] = useState<number[]>([]);
+  const [chartOptions, setchartOptions] = useState<Charts | null>(null);
 
+    // Apiの取得
     useEffect(() => {
         const PrefectureData = async () => {
             const data = await getApi();
@@ -26,18 +47,49 @@ export default function Home() {
         PrefectureData();
     }, [])
 
+
+    const generateChartOptions = (populationData: LabelData[]) => {
+      const data = populationData.map((value) => ({
+        name: value.label,
+        data: value.data.map((v): [number, number] => [
+          v.year,
+          v.value
+        ])
+      }));
+  
+      return {
+        title: {
+          text: 'Population Composition',
+        },
+        xAxis: {
+          title: {
+            text: 'Year',
+          },
+          type: 'category',
+        },
+        yAxis: {
+          title: {
+            text: 'Population',
+          },
+        },
+        series: data,
+      };
+    };
+
+    // 人口構成API
     const PopulationData = async (prefCode: number) => {
       const data = await getPopulationInfo(prefCode);
       if (data && data.result && data.result.data)
         {
-          console.log("this is the data what you want->" ,data.result.data);
           setPoputationData(data.result.data);
+          setchartOptions(generateChartOptions(data.result.data));
         }
     }
 
+    // チェックボックス
     const CheckBoxChange = (prefCode: number) => {
-      setcheckPrefecture(value => {
 
+      setcheckPrefecture(value => {
         if (value.includes(prefCode)){
           setPoputationData([]);
           return value.filter(code => code !== prefCode)
@@ -74,19 +126,9 @@ export default function Home() {
 
       <div className={styles.chartsBox}>
         <h1>Population Composition</h1>
-        <div className={styles.PoputationData}>
-          {populationData.map(labelData => (
-            <div key={labelData.label}>
-              <h2>{labelData.label}</h2>
-              <ul>
-                {labelData.data.map(data => (
-                  <li key={data.year}>
-                    Year: {data.year}, Population: {data.value}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+        <div>
+          {chartOptions && 
+          <HighchartsReact highcharts={Highcharts} options={chartOptions} />}        
         </div>
       </div>
     </div>
