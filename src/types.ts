@@ -44,6 +44,9 @@ export interface ChartsType {
     title: {
       text: string;
     };
+    labels: {
+      formatter: (this: Highcharts.AxisLabelsFormatterContextObject) => string;
+    }
   };
   series: {
     name: string;

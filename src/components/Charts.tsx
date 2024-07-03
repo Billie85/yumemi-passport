@@ -1,5 +1,5 @@
 import styles from "@/styles/Home.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getPopulationInfo } from "../services/getPopulationInfo";
 import { PrefectureList } from "./PrefectureList";
 import { LabelData } from "@/types";
@@ -7,53 +7,88 @@ import Highcharts, { Axis } from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import { ChartsType } from "@/types";
 
-export const Charts: React.FC = () => {
+export const Charts = () => {
 
-  const [chartOptions, setchartOptions] = useState<ChartsType | null>(null);
+  const [chart, setChart] = useState<ChartsType | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState('0'); 
+  const [watchChart, setWatchChart] = useState<number | null>(null);
+  const categories = ['総人口', '年少人口', '生産年齢人口', '老年人口'];
 
-  const generateChartOptions = (populationData: LabelData[]) => {
-    const data = populationData.map((value) => ({
-      name: value.label,
-      data: value.data.map((v): [number, number] => [
-        v.year,
-        v.value
-      ])
-    }));
-  
+  useEffect(() => {
+    if (watchChart != null){
+      updateChart(watchChart);
+    }
+  }, [watchChart]);
+
+  useEffect(() => {
+    if (watchChart != null){
+      updateChart(watchChart);
+    }
+  }, [selectedIndex]);
+
+  const updateChart = async (prefCode: number) => {
+    const Index = selectedIndex;
+    setSelectedIndex(Index);
+    const populationResult  = await getPopulationInfo(prefCode);
+    if (populationResult && populationResult.result && populationResult.result.data){
+      setChart(populationChart(populationResult.result.data[parseInt(Index)]));
+    }
+  };
+
+  // TODO predCodeの中身は都道府県それぞれの番号
+  const monitoringMenu = (prefCode: number) => {
+    setWatchChart(prefCode);
+    updateChart(prefCode);
+  }
+
+  const populationChart = (populationData: LabelData) => {
     return {
       title: {
-        text: '人口一覧',
+        text: `${categories[parseInt(selectedIndex)]}`,
       },
       xAxis: {
         title: {
-          text: 'Year',
+          text: '',
         },
         type: 'category',
       },
       yAxis: {
         title: {
-          text: 'Population',
+          text: '',
         },
-      },
-      series: data,
-    };
-  };
-
-      // 人口構成API
-      const PopulationData = async (prefCode: number) => {
-        const data = await getPopulationInfo(prefCode);
-        if (data && data.result && data.result.data){
-            setchartOptions(generateChartOptions(data.result.data));
+        labels: {
+          formatter: function (this: Highcharts.AxisLabelsFormatterContextObject): string {
+            return this.value.toLocaleString() +  '人';
           }
         }
-
+      },
+      series: [{
+        name: populationData.label,
+        data: populationData.data.map(v => [v.year, v.value] as [number, number])
+      }]
+    };
+  };
         return (
           <>
           <div className={styles.Container}>
-            <PrefectureList PopulationData={PopulationData} />
+            <PrefectureList PopulationData={monitoringMenu} />
+
             <div className={styles.chartsBox}>
-              <div>
-                {chartOptions && <HighchartsReact highcharts={Highcharts} options={chartOptions} />}        
+              <div className={styles.box1}>
+                <select className={styles.select} value={selectedIndex} onChange={(e) => setSelectedIndex(e.target.value)}>
+                  {
+                    categories.map((category, index) => (
+                      <option key={category} value={index.toString()}>{category}</option>
+                    ))
+                  }
+                </select>
+              </div>
+              <div className={styles.box2}>
+                <HighchartsReact
+                  highcharts={Highcharts} 
+                  options={chart}
+                  containerProps={{ style: { height: "100%", width: "100%" } }}
+                />
               </div>
             </div>
           </div>

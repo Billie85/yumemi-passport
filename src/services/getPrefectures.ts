@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { PrefectureTypes } from '@/types';
 
-export const getApi = async (): Promise<PrefectureTypes[]> => {
+export const getPrefectures = async (): Promise<PrefectureTypes[]> => {
   try {
     const response = await axios.get(
       'https://opendata.resas-portal.go.jp/api/v1/prefectures/',
@@ -11,6 +11,7 @@ export const getApi = async (): Promise<PrefectureTypes[]> => {
         },
       }
     );
+    // TODO
     // console.log(response.data.result);
     return response.data.result;
   } catch {

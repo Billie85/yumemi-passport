@@ -1,4 +1,4 @@
-import { getApi } from '@/services/getApi';
+import { getPrefectures } from '@/services/getPrefectures';
 import React, { useEffect, useState } from 'react';
 import { PrefectureTypes, PopulationDataType } from '@/types';
 import styles from "@/styles/Home.module.css";
@@ -9,7 +9,7 @@ export const PrefectureList: React.FC<PopulationDataType> = ({PopulationData}) =
 
   useEffect(() => {
     const PrefectureData = async () => {
-      const result = await getApi();
+      const result = await getPrefectures();
       setprefectures(result);
     };
     PrefectureData();
