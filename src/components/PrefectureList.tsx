@@ -1,9 +1,11 @@
 import { getPrefectures } from '@/services/getPrefectures';
 import React, { useEffect, useState } from 'react';
 import { PrefectureTypes, PopulationDataType } from '@/types';
-import styles from "@/styles/Home.module.css";
+import styles from '@/styles/Home.module.css';
 
-export const PrefectureList: React.FC<PopulationDataType> = ({PopulationData}) => {
+export const PrefectureList: React.FC<PopulationDataType> = ({
+  PopulationData,
+}) => {
   const [prefectures, setprefectures] = useState<PrefectureTypes[]>([]);
   const [checkbox, setCheckBox] = useState<number[]>([]);
 

@@ -1,4 +1,4 @@
-import { Charts} from "@/components/Charts";
+import { Charts } from '@/components/Charts';
 import React from 'react';
 
 const Home: React.FC = () => {
