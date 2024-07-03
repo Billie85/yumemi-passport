@@ -3,13 +3,12 @@ import { useEffect, useState } from "react";
 import { getPopulationInfo } from "../services/getPopulationInfo";
 import { PrefectureList } from "./PrefectureList";
 import { LabelData } from "@/types";
-import Highcharts, { Axis } from "highcharts";
+import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
-import { ChartsType } from "@/types";
 
 export const Charts = () => {
 
-  const [chart, setChart] = useState<ChartsType | null>(null);
+  const [chart, setChart] = useState<Highcharts.Options | null>(null);
   const [selectedIndex, setSelectedIndex] = useState('0'); 
   const [watchChart, setWatchChart] = useState<number | null>(null);
   const categories = ['総人口', '年少人口', '生産年齢人口', '老年人口'];
@@ -41,7 +40,7 @@ export const Charts = () => {
     updateChart(prefCode);
   }
 
-  const populationChart = (populationData: LabelData) => {
+  const populationChart: (_: LabelData) => Highcharts.Options = (populationData) => {
     return {
       title: {
         text: `${categories[parseInt(selectedIndex)]}`,
@@ -64,7 +63,8 @@ export const Charts = () => {
       },
       series: [{
         name: populationData.label,
-        data: populationData.data.map(v => [v.year, v.value] as [number, number])
+        data: populationData.data.map(v => [v.year, v.value] as [number, number]),
+        type: "line"
       }]
     };
   };

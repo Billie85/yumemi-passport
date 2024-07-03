@@ -29,27 +29,3 @@ export interface ApiResponse {
     data: LabelData[];
   };
 }
-
-export interface ChartsType {
-  title: {
-    text: string;
-  };
-  xAxis: {
-    title: {
-      text: string;
-    };
-    type: string;
-  };
-  yAxis: {
-    title: {
-      text: string;
-    };
-    labels: {
-      formatter: (this: Highcharts.AxisLabelsFormatterContextObject) => string;
-    }
-  };
-  series: {
-    name: string;
-    data: [number, number][];
-  }[];
-}
