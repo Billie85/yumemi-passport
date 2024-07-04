@@ -22,7 +22,6 @@ module.exports = {
     plugins: ['react', '@typescript-eslint', 'prettier'],
     rules: {
       'prettier/prettier': 'error',
-      // 他のルールの設定を追加できます
     },
     settings: {
       react: {

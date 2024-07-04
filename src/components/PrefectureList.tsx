@@ -3,28 +3,22 @@ import React, { useEffect, useState } from 'react';
 import { PrefectureTypes, PopulationDataType } from '@/types';
 import styles from '@/styles/Home.module.css';
 
-export const PrefectureList: React.FC<PopulationDataType> = ({
-  PopulationData,
-}) => {
-  const [prefectures, setprefectures] = useState<PrefectureTypes[]>([]);
-  const [checkbox, setCheckBox] = useState<number[]>([]);
+export const PrefectureList: React.FC<PopulationDataType> = ({PopulationData,}) => {
+  const [prefectures, setPrefectures] = useState<PrefectureTypes[]>([]);
+  const [selectedPrefecture, setSelectedPrefecture] = useState<number | null>(
+    null
+  );
 
   useEffect(() => {
     const PrefectureData = async () => {
       const result = await getPrefectures();
-      setprefectures(result);
+      setPrefectures(result);
     };
     PrefectureData();
   }, []);
 
-  const OnChange = (prefCode: number) => {
-    setCheckBox((v) => {
-      if (v.includes(prefCode)) {
-        return v.filter((code) => code !== prefCode);
-      } else {
-        return [...v, prefCode];
-      }
-    });
+  const onChange = (prefCode: number) => {
+    setSelectedPrefecture((prev) => (prev === prefCode ? null : prefCode));
     PopulationData(prefCode);
   };
 
@@ -33,17 +27,17 @@ export const PrefectureList: React.FC<PopulationDataType> = ({
       <div className={styles.selectBox}>
         <h1>都道府県一覧</h1>
         <ul>
-          {prefectures.map((v) => (
-            <li key={v.prefCode}>
+          {prefectures.map((prefecture) => (
+            <li key={prefecture.prefCode}>
               <label>
                 <input
                   type="checkbox"
-                  value={v.prefCode}
-                  checked={checkbox.includes(v.prefCode)}
-                  onChange={() => OnChange(v.prefCode)}
+                  value={prefecture.prefCode}
+                  checked={selectedPrefecture === prefecture.prefCode}
+                  onChange={() => onChange(prefecture.prefCode)}
                 />
               </label>
-              {v.prefName}
+              {prefecture.prefName}
             </li>
           ))}
         </ul>
