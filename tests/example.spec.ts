@@ -1,13 +1,13 @@
 import { test, expect } from '@playwright/test';
 
-test('北海道 年少人口のグラフ作成', async ({ page }) => {
+test('北海道 年少人口', async ({ page }) => {
   await page.goto('http://localhost:3000/');
   await page.locator('li').filter({ hasText: '北海道' }).getByLabel('').check();
   await page.getByRole('combobox').selectOption('1');
   await page.waitForTimeout(3000);
 });
 
-test('青森 老年人口のグラフ作成', async ({ page }) => {
+test('青森 老年人口', async ({ page }) => {
   await page.goto('http://localhost:3000/');
   await page.locator('li').filter({ hasText: '青森県' }).getByLabel('').check();
   await page.getByRole('combobox').selectOption('3');

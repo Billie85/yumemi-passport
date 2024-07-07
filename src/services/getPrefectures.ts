@@ -11,8 +11,6 @@ export const getPrefectures = async (): Promise<PrefectureTypes[]> => {
         },
       }
     );
-    // TODO
-    // console.log(response.data.result);
     return response.data.result;
   } catch {
     console.error('Error fetching data:');

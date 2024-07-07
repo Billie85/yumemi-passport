@@ -5,6 +5,7 @@ import { PrefectureList } from './PrefectureList';
 import { LabelData } from '@/types';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
+import 'boxicons/css/boxicons.min.css';
 
 export const Charts = () => {
   const [chart, setChart] = useState<Highcharts.Options | null>(null);
@@ -96,6 +97,7 @@ export const Charts = () => {
                 </option>
               ))}
             </select>
+            <div className="bx bx-menu" id={styles.menu_icon}></div>
           </div>
           <div className={styles.box2}>
             <HighchartsReact
